@@ -49,3 +49,13 @@ The full MemoryProxy TypeScript check already fails on unmodified
 test tuple, and cost-guard-module code. The new targeted Knowledge MCP suite
 passes. The compatibility workflow therefore runs the focused 50-test suite
 instead of presenting the unrelated baseline failures as regressions.
+
+Pyrito Mind's existing MemoryCore packaging workflow initially failed before
+its pack checks because npm's peer resolver crashed while traversing the
+package's optional host-provided peers (`Cannot read properties of null
+(reading 'edgesOut')`). A clean temporary install reproduced the failure.
+Legacy peer handling got past installation, then exposed a second existing
+failure: the package calls `scripts/seed-v2/tsconfig.json`, which is not in the
+repository. Neither failure is related to Context MCP. The Pyrito Mind PR
+limits that MemoryCore-only workflow to `MemoryCore/**`; Context MCP changes
+are instead covered by the new focused compatibility workflow.
