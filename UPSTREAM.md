@@ -17,10 +17,11 @@ This repository is the distribution source for the teammate-facing Context MCP
 plugin. `pyrito-mind` remains the source for the server-side MemoryProxy,
 MemoryKnowledge, MemoryCore, identity, and ACL implementation.
 
-The repositories do not sync automatically. A later client-integration change
-made under `pyrito-mind/integrations/pyrito-context` must be deliberately
-ported here, tested, and released. Server contract changes must remain backward
-compatible with the plugin or be paired with a Context MCP release.
+The repositories use guarded one-way synchronization. A canonical client change
+merged here creates or updates a review pull request for
+`pyrito-mind/integrations/pyrito-context`; it never pushes to or merges
+`pyrito-mind/main`. Server contract changes remain in Pyrito Mind and are
+checked there against the mirrored client allowlist.
 
 ## Verify a local Pyrito Mind checkout
 
@@ -33,3 +34,5 @@ python3 scripts/check_upstream.py ../pyrito-mind
 The check compares only the files that were extracted. Plugin manifests,
 packaging tests, and standalone documentation are intentionally local to this
 repository.
+
+See [docs/AUTOMATIC-SYNC.md](docs/AUTOMATIC-SYNC.md) for setup and operations.

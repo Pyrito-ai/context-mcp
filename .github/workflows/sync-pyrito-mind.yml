@@ -1,0 +1,119 @@
+name: Sync Context MCP to Pyrito Mind
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "bootstrap.py"
+      - "skills/**"
+      - "templates/**"
+      - "tests/test_bootstrap.py"
+      - "sync/pyrito-mind.json"
+      - "scripts/context_sync.py"
+      - "scripts/check_upstream.py"
+      - "scripts/sync_to_pyrito_mind.py"
+      - "tests/test_sync_to_pyrito_mind.py"
+      - ".github/workflows/sync-pyrito-mind.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: context-mcp-to-pyrito-mind
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check synchronization credentials
+        env:
+          APP_ID: ${{ vars.PYRITO_SYNC_APP_ID }}
+          PRIVATE_KEY: ${{ secrets.PYRITO_SYNC_PRIVATE_KEY }}
+        run: |
+          test -n "$APP_ID" || { echo "Missing repository variable PYRITO_SYNC_APP_ID"; exit 1; }
+          test -n "$PRIVATE_KEY" || { echo "Missing repository secret PYRITO_SYNC_PRIVATE_KEY"; exit 1; }
+
+      - name: Check out Context MCP
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          path: context-mcp
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: "3.12"
+
+      - name: Test canonical package
+        working-directory: context-mcp
+        run: python3 -m unittest discover -s tests -v
+
+      - name: Create target-scoped GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@fee1f7d63c2ff003460e3d139729b119787bc349
+        with:
+          app-id: ${{ vars.PYRITO_SYNC_APP_ID }}
+          private-key: ${{ secrets.PYRITO_SYNC_PRIVATE_KEY }}
+          owner: Pyrito-ai
+          repositories: pyrito-mind
+
+      - name: Check out Pyrito Mind
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          repository: Pyrito-ai/pyrito-mind
+          ref: main
+          fetch-depth: 0
+          token: ${{ steps.app-token.outputs.token }}
+          path: pyrito-mind
+
+      - name: Synchronize bounded payload
+        run: >-
+          python3 context-mcp/scripts/sync_to_pyrito_mind.py pyrito-mind
+          --source-revision "$GITHUB_SHA"
+
+      - name: Verify synchronized bootstrap package
+        run: python3 -m unittest discover -s pyrito-mind/integrations/pyrito-context/tests -v
+
+      - name: Check target diff
+        run: git -C pyrito-mind diff --check
+
+      - name: Detect changes
+        id: changes
+        run: |
+          if [ -z "$(git -C pyrito-mind status --porcelain --untracked-files=all -- integrations/pyrito-context)" ]; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Commit synchronization branch
+        if: steps.changes.outputs.changed == 'true'
+        working-directory: pyrito-mind
+        run: |
+          git config user.name "pyrito-sync[bot]"
+          git config user.email "pyrito-sync[bot]@users.noreply.github.com"
+          git switch -C automation/context-mcp-sync
+          git add integrations/pyrito-context
+          git commit -m "Sync Context MCP ${GITHUB_SHA::12}"
+          REMOTE_SHA=$(git ls-remote --heads origin refs/heads/automation/context-mcp-sync | cut -f1)
+          git push --force-with-lease=refs/heads/automation/context-mcp-sync:"$REMOTE_SHA" origin HEAD:refs/heads/automation/context-mcp-sync
+
+      - name: Open or update review pull request
+        if: steps.changes.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          SOURCE_SHA: ${{ github.sha }}
+        run: |
+          PR_NUMBER=$(gh pr list --repo Pyrito-ai/pyrito-mind --base main --head automation/context-mcp-sync --state open --json number --jq '.[0].number')
+          TITLE="Sync Context MCP into Pyrito Mind"
+          BODY="Automated one-way synchronization from Pyrito-ai/context-mcp@${SOURCE_SHA}. The Context MCP repository is canonical for this payload. Review and CI are required; this workflow does not merge the PR."
+          if [ -n "$PR_NUMBER" ]; then
+            gh pr edit "$PR_NUMBER" --repo Pyrito-ai/pyrito-mind --title "$TITLE" --body "$BODY"
+          else
+            gh pr create --repo Pyrito-ai/pyrito-mind --base main --head automation/context-mcp-sync --title "$TITLE" --body "$BODY"
+          fi
+
+      - name: Report no-op
+        if: steps.changes.outputs.changed != 'true'
+        run: echo "Pyrito Mind already matches Context MCP; no pull request needed."
