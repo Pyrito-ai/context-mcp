@@ -196,4 +196,6 @@ claude plugin validate .
 
 Version 0.1.0 was extracted from the exact `integrations/pyrito-context` tree merged in Pyrito Mind PR #14. See [UPSTREAM.md](UPSTREAM.md) for the pinned commits and the read-only comparison command.
 
-Future server work stays in `pyrito-mind`. Future teammate installation, skill, and client MCP configuration work belongs here. The repositories do not update one another automatically, so any later change to the old integration directory must be deliberately ported and released.
+Future server work stays in `pyrito-mind`. Future teammate installation, skill, and client MCP configuration work belongs here.
+
+Changes to the canonical client payload on `main` automatically create or update a review pull request against `pyrito-mind`. The automation never commits to or merges `pyrito-mind/main`. See [Automatic synchronization](docs/AUTOMATIC-SYNC.md) for the exact boundary, required GitHub App permissions, and recovery procedure.

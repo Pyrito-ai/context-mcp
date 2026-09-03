@@ -1,0 +1,12 @@
+{
+  "target_path": "integrations/pyrito-context",
+  "managed_files": [
+    "bootstrap.py",
+    "tests/test_bootstrap.py"
+  ],
+  "managed_directories": [
+    "skills",
+    "templates"
+  ],
+  "revision_file": "CONTEXT_MCP_REVISION"
+}
