@@ -36,7 +36,9 @@ class PluginPackageTests(unittest.TestCase):
         self.assertFalse(server["required"])
 
     def test_claude_uses_environment_bearer(self):
-        server = self.load_json(".claude-plugin/plugin.json")["mcpServers"]["pyrito-context"]
+        manifest = self.load_json(".claude-plugin/plugin.json")
+        self.assertEqual(manifest["mcpServers"], "./.claude-plugin/mcp.json")
+        server = self.load_json(".claude-plugin/mcp.json")["mcpServers"]["pyrito-context"]
         self.assertEqual(server["url"], ENDPOINT)
         self.assertEqual(server["headers"]["Authorization"], f"Bearer ${{{TOKEN_ENV}}}")
 

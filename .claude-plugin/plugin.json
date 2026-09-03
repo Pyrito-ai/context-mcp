@@ -1,7 +1,7 @@
 {
   "name": "context-mcp",
   "displayName": "Context MCP",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Load authorized Pyrito Mind context, invoke configured Agents, and explicitly capture useful session outcomes.",
   "author": {
     "name": "Pyrito AI",
@@ -18,13 +18,5 @@
     "knowledge"
   ],
   "skills": "./skills/",
-  "mcpServers": {
-    "pyrito-context": {
-      "type": "http",
-      "url": "https://proxy.memory.pyrito.com/knowledge-mcp",
-      "headers": {
-        "Authorization": "Bearer ${PYRITO_CONTEXT_TOKEN}"
-      }
-    }
-  }
+  "mcpServers": "./.claude-plugin/mcp.json"
 }

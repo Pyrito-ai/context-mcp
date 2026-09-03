@@ -1,6 +1,6 @@
 {
   "name": "context-mcp",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Load authorized Pyrito Mind context, invoke configured Agents, and explicitly capture useful session outcomes.",
   "author": {
     "name": "Pyrito AI",
