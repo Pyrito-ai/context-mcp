@@ -2,8 +2,8 @@
 
 ## 0.1.1 - 2026-09-03
 
-- Declare Claude's MCP configuration through an explicit companion path so it
-  is included in the installed component inventory.
+- Declare Claude's MCP configuration through an explicit companion path
+  supported by the Claude plugin schema.
 
 ## 0.1.0 - 2026-09-03
 
