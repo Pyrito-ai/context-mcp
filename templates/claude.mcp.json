@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "pyrito-context": {
+      "type": "http",
+      "url": "<PYRITO_KNOWLEDGE_MCP_URL>",
+      "headers": {
+        "Authorization": "Bearer ${PYRITO_CONTEXT_TOKEN}"
+      }
+    }
+  }
+}

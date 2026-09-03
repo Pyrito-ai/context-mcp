@@ -1,0 +1,54 @@
+{
+  "name": "context-mcp",
+  "version": "0.1.0",
+  "description": "Load authorized Pyrito Mind context, invoke configured Agents, and explicitly capture useful session outcomes.",
+  "author": {
+    "name": "Pyrito AI",
+    "url": "https://github.com/Pyrito-ai"
+  },
+  "homepage": "https://github.com/Pyrito-ai/context-mcp",
+  "repository": "https://github.com/Pyrito-ai/context-mcp",
+  "license": "MIT",
+  "keywords": [
+    "pyrito",
+    "memory",
+    "context",
+    "mcp",
+    "knowledge"
+  ],
+  "skills": "./skills/",
+  "mcpServers": {
+    "pyrito-context": {
+      "type": "http",
+      "url": "https://proxy.memory.pyrito.com/knowledge-mcp",
+      "bearer_token_env_var": "PYRITO_CONTEXT_TOKEN",
+      "enabled_tools": [
+        "prepare_context",
+        "search_knowledge",
+        "read_knowledge_page",
+        "prepare_agent",
+        "capture_session"
+      ],
+      "required": false
+    }
+  },
+  "interface": {
+    "displayName": "Context MCP",
+    "shortDescription": "Use authorized Pyrito Mind context in Codex.",
+    "longDescription": "Connects Codex directly to Pyrito's authenticated Context MCP. Teammates can explicitly load bounded MemoryKnowledge and MemoryCore context, adopt their configured Pyrito Mind Agents, and save concise session outcomes without routing model prompts or responses through Pyrito.",
+    "developerName": "Pyrito AI",
+    "category": "Productivity",
+    "capabilities": [
+      "Read authorized MemoryKnowledge context",
+      "Recall personal MemoryCore context",
+      "Adopt configured Pyrito Mind Agents",
+      "Explicitly capture durable session outcomes"
+    ],
+    "brandColor": "#1F7A82",
+    "defaultPrompt": [
+      "Use $prepare-context to load relevant Pyrito context.",
+      "Use $invoke-agent to adopt one of my Pyrito Agents.",
+      "Use $capture-session to save this session's outcomes."
+    ]
+  }
+}

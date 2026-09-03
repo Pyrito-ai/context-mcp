@@ -1,0 +1,4 @@
+interface:
+  display_name: "Prepare Context"
+  short_description: "Load bounded Pyrito client context"
+  default_prompt: "Use $prepare-context to load relevant client context for this work."

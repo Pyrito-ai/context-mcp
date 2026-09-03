@@ -1,0 +1,14 @@
+{
+  "name": "context-mcp",
+  "description": "Official Pyrito AI context plugins for Claude Code and Codex.",
+  "owner": {
+    "name": "Pyrito AI"
+  },
+  "plugins": [
+    {
+      "name": "context-mcp",
+      "source": "./",
+      "description": "Authenticated, explicitly invoked Pyrito Mind context for Claude Code and Codex."
+    }
+  ]
+}

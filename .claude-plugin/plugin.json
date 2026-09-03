@@ -1,0 +1,30 @@
+{
+  "name": "context-mcp",
+  "displayName": "Context MCP",
+  "version": "0.1.0",
+  "description": "Load authorized Pyrito Mind context, invoke configured Agents, and explicitly capture useful session outcomes.",
+  "author": {
+    "name": "Pyrito AI",
+    "url": "https://github.com/Pyrito-ai"
+  },
+  "homepage": "https://github.com/Pyrito-ai/context-mcp",
+  "repository": "https://github.com/Pyrito-ai/context-mcp",
+  "license": "MIT",
+  "keywords": [
+    "pyrito",
+    "memory",
+    "context",
+    "mcp",
+    "knowledge"
+  ],
+  "skills": "./skills/",
+  "mcpServers": {
+    "pyrito-context": {
+      "type": "http",
+      "url": "https://proxy.memory.pyrito.com/knowledge-mcp",
+      "headers": {
+        "Authorization": "Bearer ${PYRITO_CONTEXT_TOKEN}"
+      }
+    }
+  }
+}

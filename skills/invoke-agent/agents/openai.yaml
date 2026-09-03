@@ -1,0 +1,4 @@
+interface:
+  display_name: "Invoke Agent"
+  short_description: "Adopt a named Pyrito Mind Agent for this task"
+  default_prompt: "Use $invoke-agent to act as one of my Pyrito Mind Agents for this task."
