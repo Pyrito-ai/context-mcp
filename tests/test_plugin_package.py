@@ -60,6 +60,20 @@ class PluginPackageTests(unittest.TestCase):
         self.assertEqual(marketplace["plugins"][0]["name"], "context-mcp")
         self.assertEqual(marketplace["plugins"][0]["source"], "./")
 
+    def test_teammate_setup_is_public_agent_guided_and_secret_safe(self):
+        teammate = (ROOT / "docs" / "TEAMMATE-SETUP.md").read_text(encoding="utf-8")
+        runbook = (ROOT / "docs" / "AGENT-INSTALL.md").read_text(encoding="utf-8")
+        combined = f"{teammate}\n{runbook}".lower()
+
+        self.assertIn("https://github.com/pyrito-ai/context-mcp", combined)
+        self.assertIn("does not require a github account", combined)
+        self.assertIn("do not ask me to paste", combined)
+        self.assertIn("hidden local input", combined)
+        self.assertIn("restart", teammate.lower())
+        self.assertIn("verification prompt", teammate.lower())
+        self.assertNotIn("pyrito-ai/pyrito-mind.git", combined)
+        self.assertNotIn("gh auth login", combined)
+
 
 if __name__ == "__main__":
     unittest.main()
