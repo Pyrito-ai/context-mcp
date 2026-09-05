@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.2 - 2026-09-05
+
+- Add a low-tech, agent-guided teammate setup flow.
+- Require public, unauthenticated installation without access to Pyrito Mind.
+- Keep personal keys out of agent conversations and repository files.
+- Add a separate post-restart prompt for real read-only access verification.
+
 ## 0.1.1 - 2026-09-03
 
 - Declare Claude's MCP configuration through an explicit companion path

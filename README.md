@@ -2,6 +2,21 @@
 
 Context MCP gives Claude Code and Codex the same authenticated, explicitly invoked Pyrito Mind workflows without requiring teammates to install or run the Pyrito Mind application repository. The MCP server runs on the Pyrito VPS; this repository is the small client plugin installed on each teammate's computer.
 
+## Teammate setup without GitHub access
+
+Teammates do not need a GitHub account, repository access, or command-line
+experience. Give them their personal Context MCP key through a secure handover,
+then have them copy one prompt into Claude Code or Codex:
+
+- [Copy-and-paste teammate prompts](docs/TEAMMATE-SETUP.md)
+- [Agent installation runbook](docs/AGENT-INSTALL.md)
+
+The agent performs the public download and installation. The teammate only
+enters their personal key through a hidden local input when prompted, restarts
+their agent once, and pastes the verification prompt. The key must never be
+pasted into an agent conversation, an email, a GitHub field, or a repository
+file.
+
 It configures:
 
 - a remote Streamable HTTP MCP server named `pyrito-context`;
